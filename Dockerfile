@@ -1,17 +1,23 @@
-# Step 1: Use an official Haskell image as the base image
-FROM haskell:latest
+# Use the official Haskell image
+FROM haskell:8.10
 
-# Step 2: Set the working directory inside the container
-WORKDIR /app
+# Set the working directory inside the container
+WORKDIR /opt/math-evaluator-haskell
 
-# Step 3: Install Stack (if not already available in the image)
-RUN apt-get update && apt-get install -y curl && curl -sSL https://get.haskellstack.org/ | sh
+# Update cabal package list
+RUN cabal update
 
-# Step 4: Copy the project files (including stack.yaml and source code)
-COPY . /app
+# Copy the .cabal file first to install dependencies without the source code
+COPY ./math-evaluator-haskell.cabal /opt/math-evaluator-haskell/math-evaluator-haskell.cabal
 
-# Step 5: Install dependencies and build the project
-RUN stack setup && stack build
+# Install the dependencies (this will be cached unless the .cabal file changes)
+RUN cabal build --only-dependencies -j4
 
-# Step 6: Set the default command to run the application
-CMD ["stack", "exec", "haskell-parser-exe"]
+# Copy the source code
+COPY . /opt/math-evaluator-haskell
+
+# Install the application (this builds the project and installs it)
+RUN cabal install
+
+# Set the default command to run your application
+CMD ["math-evaluator-haskell"]
