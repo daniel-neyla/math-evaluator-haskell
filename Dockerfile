@@ -21,3 +21,6 @@ RUN cabal install
 
 # Set the default command to run your application
 CMD ["math-evaluator-haskell"]
+
+
+# Run this for interactive docker session: docker run -it -v "$(pwd):/opt/math-evaluator-haskell" haskell-parser bash

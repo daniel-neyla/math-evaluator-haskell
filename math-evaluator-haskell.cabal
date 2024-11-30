@@ -71,7 +71,7 @@ executable math-evaluator-haskell
     -- build-depends:    base ^>=4.17.2.1
     build-depends:       base >= 4.14 && < 5
     -- Directories containing source files.
-    hs-source-dirs:   app
+    hs-source-dirs:   app, src
 
     -- Base language which the package is written in.
     default-language: Haskell2010
