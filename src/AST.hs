@@ -27,9 +27,9 @@ instance Show Exp where
 
 eval :: Exp -> Either String Float
 eval (Num x)   = Right x
-eval (x :+: y)   = (+) <$> eval x <*> eval y
-eval (x :-: y)   = (-) <$> eval x <*> eval y
-eval (x :*: y)   = (*) <$> eval x <*> eval y
+eval (x :+: y) = (+) <$> eval x <*> eval y
+eval (x :-: y) = (-) <$> eval x <*> eval y
+eval (x :*: y) = (*) <$> eval x <*> eval y
 eval (x :/: y) = 
   case eval y of
   Right 0 -> Left "Error: Division by zero"
