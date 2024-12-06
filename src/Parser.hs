@@ -1,4 +1,4 @@
-module Parser where
+module Parser(Parser, apply, parse, char, spot, token, match, star, plus, parseInt, parseFloat, chainl1, (<|>), (<*>)) where
 
 import Data.Char
 import Control.Applicative
@@ -124,3 +124,24 @@ parseNeg =  do token '-'
 -- match an integer
 parseInt :: Parser Int
 parseInt =  parseNat `mplus` parseNeg
+
+parseFloat :: Parser Float
+parseFloat = do
+  n <- parseInt
+  token '.'    
+  d <- parseNat  
+  let decimal = fromIntegral d / (10 ^ length (show d))
+  return (fromIntegral n + if n < 0 then -decimal else decimal)
+
+  
+
+chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
+chainl1 p op = do
+  x <- p
+  rest x
+  where
+    rest x = (do
+                f <- op
+                y <- p
+                rest (f x y))
+             <|> return x
