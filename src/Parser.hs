@@ -79,7 +79,7 @@ char =  Parser f
 -- Parse a character satisfying a predicate (e.g., isDigit)
 spot :: (Char -> Bool) -> Parser Char
 spot p  =  do 
-  
+  c <- char
   guard (p c) -- Fails with mzero if predicate is false
   return c 
 
